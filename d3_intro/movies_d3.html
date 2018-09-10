@@ -8,9 +8,11 @@
 </head>
 
 <body>
+    <h1>Rank de maiores bilheterias</h1>
     <div id="chart"></div>
+    <div id="chart2"></div>
     <script type="text/javascript">
-        function render(movies) {
+        function render(movies, comparator) {
             d3.select("#chart").selectAll("div.h-bar")
                 .data(movies)
                 .enter()
@@ -22,7 +24,7 @@
                 .data(movies)
                     .attr("class", "h-bar")
                     .style("width", function (m) {
-                        return ( m.Worldwide_Gross_M * 0.2) + "px";
+                        return ( m.Worldwide_Gross_M * 1) + "px";
                     })
                 .select("span")
                     .text(function (m) {
@@ -34,12 +36,41 @@
                         .sort(comparator);
         }
 
+        function render2(movies, comparator) {
+            d3.select("#chart2").selectAll("div.h-bar")
+                .data(movies)
+                .enter()
+                    .append("div")
+                        .attr("class", "h-bar")
+                    .append("span");
+
+            d3.select("#chart2").selectAll("div.h-bar")
+                .data(movies)
+                    .attr("class", "h-bar")
+                    .style("width", function (m) {
+                        return ( m.Budget_M * 1) + "px";
+                    })
+                .select("span")
+                    .text(function (m) {
+                        return m.Budget_M;
+                    });
+                if(comparator)
+                    d3.select("body")
+                        .selectAll("div.h-bar")
+                        .sort(comparator);
+        }
+
         let maiorBilheteria = function(a,b){
-            return a.Worldwide_Gross_M - b.Worldwide_Gross_M;
+            return b.Worldwide_Gross_M - a.Worldwide_Gross_M;
+        }
+
+        let menorOrçamento = function(a,b){
+            return a.Budget_M - b.Budget_M
         }
         
         d3.json("data/movies.json").then(function(json){ 
             render(json, maiorBilheteria);
+            render2(json, menorOrçamento);
         });
     </script>
 </body>
