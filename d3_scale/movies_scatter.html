@@ -27,69 +27,87 @@
             .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-   function plotar(data){
+   function plotar(data,w,h){
 
-    let xScale = d3.scaleLinear()
+        let xScale = d3.scaleLinear()
                     .domain([0, d3.max(data, function(d){
                         return d["Worldwide_Gross_M"];
                     })])
                     .range([0,w]);
 
-    let yScale = d3.scaleLinear()
+        let yScale = d3.scaleLinear()
                     .domain([0, d3.max(data, function(d){
                         return d["Budget_M"];
                     })])
                     .range([h,0]);
 
-    let xAxis = d3.axisBottom()
+        let xAxis = d3.axisBottom()
                     .scale(xScale)
-                    .ticks([5);
+                    .ticks(5);
 
-    let yAxis = d3.axisLeft()
+        let yAxis = d3.axisLeft()
                     .scale(yScale)
                     .ticks(5);
+    
+        svg.selectAll("circle")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d){
+                return xScale(d["Worldwide_Gross_M"]);
+            })
+            .attr("cy", function(d){
+                return yScale(d["Budget_M"]);
+            })
+            .attr('r', 5);
+        
+        svg.selectAll("text")
+            .data(data)
+            .enter()
+            .append("text")
+            .attr("x", function(d){
+                return xScale(d["Worldwide_Gross_M"]);
+            })
+            .attr("y", function(d){
+                return yScale(d["Budget_M"]);
+            })
+            .attr("font-family","sans-serif")
+            .attr("font-size","9px")
+            .attr("fill","blue")
+            .text(function(d){
+                return d["Worldwide_Gross_M"]+','+d["Budget_M"];
+            });    
+
+
+        svg.append("text")
+            .attr("transform", "translate(" + (w/2) + "," + (h + margin.bottom) + ")" )
+            .style("text-anchor", "middle")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "12px")
+            .text("Worldwide_Gross_M");
+
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - margin.left)
+            .attr("x",0 - (h / 2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "12px")
+            .text("Budget_M");    
+
+        svg.append("g")
+            .attr("transform", "translate(0," + h + ")")
+            .call(xAxis);
+
+        svg.append("g")
+            .call(yAxis);
+
     }
 
     d3.json("data/movies.json").then(function(json){
-        plotar(json)
+        plotar(json,w,h)
     });
-
-    svg.selectAll("circle")
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("cx", function(d){
-            return xScale(d["Worldwide_Gross_M"]);
-        })
-       .attr("cy", function(d){
-            return yScale(d["Budget_M"]);
-            })
-        .attr('r', 5);
-    
-    svg.append("text")
-        .attr("transform", "translate(" + (w/2) + "," + (h + margin.bottom) + ")" )
-        .style("text-anchor", "middle")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", "12px")
-        .text("Worldwide_Gross_M");
-
-    svg.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 0 - margin.left)
-        .attr("x",0 - (h / 2))
-        .attr("dy", "1em")
-        .style("text-anchor", "middle")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", "12px")
-        .text("Budget_M");    
-
-    svg.append("g")
-        .attr("transform", "translate(0," + h + ")")
-        .call(xAxis);
-
-    svg.append("g")
-        .call(yAxis);
-
 
 </script>
 </body>
