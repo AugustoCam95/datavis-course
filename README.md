@@ -23,7 +23,7 @@
 [01_scatterplot.html](d3_update/01_scatterplot.html) 
 
 ## Aula do dia 24/09/2018
-[acoes.html](d3_crossfiltrer/acoes.html)
+[acoes.html](d3_crossfiltrer/acoes.html)<br>
 [movies_d3_dc.html](d3_crossfiltrer/acoes.html)
 
 Para saber mais sobre a sintaxe markdown, veja [este guia](https://guides.github.com/features/mastering-markdown/).
