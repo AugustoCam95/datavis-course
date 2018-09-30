@@ -53,23 +53,21 @@
 	var dataTable = dc.dataTable('#chart4')
 
 
-
-
 	// load data from a csv file
 	d3.csv("data/earthquakes.csv").then(function (data) {
 
 	  // format our data
-	  	var dtg_time_format = d3.time.format.utc("%Y-%m-%dT%H:%M:%S");
-		var format_Mag = d3.format(".1f")
-		var format_depth = d3.format("d")
+	  	var dtg_time_format = d3.utcParse("%Y-%m-%dT%H:%M:%S");
+		var format_Mag = d3.format(".1f");
+		var format_depth = d3.format("d");
 
 
 	  	data.forEach(function(d){
 	  		d.dtg = dtg_time_format(d.origintime.substr(0,19));
-	  		d.Magnitude = format_Mag(+d.Magnitude)
-	  		d.Depth = format_depth(+d.depth)
-	  		d.Latitude = +d.Latitude
-	  		d.Longitude = +d.Longitude
+	  		d.Magnitude = format_Mag(+d.Magnitude);
+	  		d.Depth = format_depth(+d.depth);
+	  		d.Latitude = +d.Latitude;
+	  		d.Longitude = +d.Longitude;
  	  	});
 
 	  // Run the data through crossfilter and load our 'facts'
@@ -99,7 +97,7 @@
 	  // Create a dimension just for the hour from the datetime in the dataset
 	  //hint: use d3.time.hour() function
 	  	var hourDim = facts.dimension(function(d){
-	  		return d3.time.hour(d.dtg)
+	  		return d3.utcHour(d.dtg)
 	  	});
 
 	  //Create a group for the hour dimension that just counts the number of elements per hour
@@ -120,8 +118,8 @@
 	  		.transitionDuration(500)
 	  		.centerBar(true)
 	  		.gap(56)
-	  		.x(d3.scale.linear().domain([0,8]))
-	  		.elascticY(true)
+	  		.x(d3.scaleLinear().domain([0,8]))
+	  		.elasticY(true)
 	  		.xAxis().tickFormat();
 	  	
 
@@ -136,14 +134,14 @@
 	  		.transitionDuration(500)
 	  		.centerBar(true)
 	  		.gap(56)
-	  		.x(d3.scale.linear().domain([0,8]))
-	  		.elascticY(true)
+	  		.x(d3.scaleLinear().domain([0,8]))
+	  		.elasticY(true)
 	  		.xAxis().tickFormat();
 	 
 	  // Configure Time line graph
 	  // height: 150
 	  //x dimension: build the time scale from the data: d3.time.scale().domain(d3.extent(data, function(d) { return d.dtime; }))
-		lineChart.width(960)
+		lineChartTime.width(960)
 	  		.height(150)
 	  		.transitionDuration(500)
 	  			.mouseZoomable(true)
@@ -151,8 +149,8 @@
 	  		.dimension(hourDim)
 	  		.group(hourGroup)
 	  		.brushOn(false)
-	  		.X(d3.time.scale().domain(d3.extent(data, function (d){
-	  			return d3.time.hour(d.dtg);
+	  		.x(d3.scaleTime().domain(d3.extent(data, function (d){
+	  			return d3.utcHour(d.dtg);
 	  		})))
 	  		.elasticY(true);
 
