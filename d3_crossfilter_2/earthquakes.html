@@ -47,10 +47,10 @@
   <script type="text/javascript">
 	// Create the dc.js chart objects & link to div
 	
-	var barChartMag = dc.barChart('#chart1')
-	var barChartDep = dc.barChart('#chart2')
-	var lineChartTime = dc.lineChart('#chart3')
-	var dataTable = dc.dataTable('#chart4')
+	var barChartMag = dc.barChart('#magnitude-chart')
+	var barChartDep = dc.barChart('#depth-chart')
+	var lineChartTime = dc.lineChart('#time-chart')
+	var dataTable = dc.dataTable('#dc-table-graph')
 
 
 	// load data from a csv file
@@ -64,8 +64,8 @@
 
 	  	data.forEach(function(d){
 	  		d.dtg = dtg_time_format(d.origintime.substr(0,19));
-	  		d.Magnitude = format_Mag(+d.Magnitude);
-	  		d.Depth = format_depth(+d.depth);
+	  		d.Magnitude = format_Mag(d.Magnitude);
+	  		d.Depth = format_depth(d.depth);
 	  		d.Latitude = +d.Latitude;
 	  		d.Longitude = +d.Longitude;
  	  	});
@@ -74,34 +74,34 @@
 	 	var facts = crossfilter(data);
 
 	 // Create a dimession for DTG
-	 	var dateDimension = facts.dimension(function(d){
-	 		return d.dtg
+	 	let dateDimension = facts.dimension(function(d){
+	 		return d.dtg;
 	 	});	
 
 	  //Create a dimension for Magnitude
-	  	var dimMag = facts.dimension(function (d){
-	  		return d.Magnitude
+	  	let dimMag = facts.dimension(function (d){
+	  		return d.Magnitude;
 	  	});
 
 	  //Create a group for Magnitude that just counts the number of elements in the group
-		var MagGroup = dimMag.group();
+		let MagGroup = dimMag.group();
 
 	  // Create a dimension for Depth
-	 	var dimDep = facts.dimension(function (d){
-	 		return d.Depth
+	 	let dimDep = facts.dimension(function (d){
+	 		return d.Depth;
 	 	});
 
 	  //Create a group for Depth that just counts the number of elements in the group
-	  	var DepGroup = dimDep.group();
+	  	let DepGroup = dimDep.group();
 
 	  // Create a dimension just for the hour from the datetime in the dataset
 	  //hint: use d3.time.hour() function
-	  	var hourDim = facts.dimension(function(d){
-	  		return d3.utcHour(d.dtg)
+	  	let hourDim = facts.dimension(function(d){
+	  		return d3.timeHour(d.dtg);
 	  	});
 
 	  //Create a group for the hour dimension that just counts the number of elements per hour
-	  	var hourGroup = hourDim.group();
+	  	let hourGroup = hourDim.group();
 
 	  // Setup the charts
 
@@ -112,15 +112,13 @@
 	  //set elasticY to true
 	  barChartMag.width(480)
 	  		.height(150)
-	  		.margins({top: 10, right: 10, bottom: 20, left: 40})
+	  		.x(d3.scaleLinear().domain([0,8]))
+	  		.brushOn(false)
 	  		.dimension(dimMag)
 	  		.group(MagGroup)
-	  		.transitionDuration(500)
-	  		.centerBar(true)
 	  		.gap(56)
-	  		.x(d3.scaleLinear().domain([0,8]))
 	  		.elasticY(true)
-	  		.xAxis().tickFormat();
+	  		.mouseZoomable(true);
 	  	
 
 	  // Configure Depth bar graph
@@ -131,12 +129,9 @@
 	  		.margins({top: 10, right: 10, bottom: 20, left: 40})
 	  		.dimension(dimDep)
 	  		.group(DepGroup)
-	  		.transitionDuration(500)
-	  		.centerBar(true)
 	  		.gap(56)
 	  		.x(d3.scaleLinear().domain([0,8]))
-	  		.elasticY(true)
-	  		.xAxis().tickFormat();
+	  		.elasticY(true);
 	 
 	  // Configure Time line graph
 	  // height: 150
@@ -150,7 +145,7 @@
 	  		.group(hourGroup)
 	  		.brushOn(false)
 	  		.x(d3.scaleTime().domain(d3.extent(data, function (d){
-	  			return d3.utcHour(d.dtg);
+	  			return d.dtg;
 	  		})))
 	  		.elasticY(true);
 
@@ -162,8 +157,8 @@
 	  			return "Earthquake Table";
 	  		})
 	  		.size(10)
-	  		.columns('dtg','Magnitude','Depth','Latitude','Longitude')
-	  		.sortBy(function(){return d.dtg})
+	  		.columns(['dtg','magnitude','depth','latitude','longitude'])
+	  		.sortBy(function(d){return d.dtg;})
 	  		.order(d3.ascending);
 
 
