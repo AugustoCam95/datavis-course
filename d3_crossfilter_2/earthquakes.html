@@ -64,7 +64,7 @@
 
 	  	data.forEach(function(d){
 	  		d.dtg = dtg_time_format(d.origintime.substr(0,19));
-	  		d.Magnitude = format_Mag(d.Magnitude);
+	  		d.Magnitude = format_Mag(d.magnitude);
 	  		d.Depth = format_depth(d.depth);
 	  		d.Latitude = +d.Latitude;
 	  		d.Longitude = +d.Longitude;
@@ -112,6 +112,7 @@
 	  //set elasticY to true
 	  barChartMag.width(480)
 	  		.height(150)
+	  		.margins({top: 10, right: 10, bottom: 20, left: 40})
 	  		.x(d3.scaleLinear().domain([0,8]))
 	  		.brushOn(false)
 	  		.dimension(dimMag)
@@ -127,10 +128,11 @@
 	  	barChartDep.width(480)
 	  		.height(150)
 	  		.margins({top: 10, right: 10, bottom: 20, left: 40})
+	  		.brushOn(false)
 	  		.dimension(dimDep)
 	  		.group(DepGroup)
 	  		.gap(56)
-	  		.x(d3.scaleLinear().domain([0,8]))
+	  		.x(d3.scaleLinear().domain([0,100]))
 	  		.elasticY(true);
 	 
 	  // Configure Time line graph
