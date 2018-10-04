@@ -106,29 +106,31 @@
 			
 		});
 
-	  	barChart.width(800)
+	  	barChart.width(600)
 	  		.height(400)
-	  		.margins({top: 10, right: 10, bottom: 20, left: 40})
+	  		.dimension(crimeDim)
+	  		.group(crimeGroup)
 	  		.x(d3.scaleOrdinal())
-	  		.brushOn(false)
-	  		.dimension(crimeDim)
-	  		.group(crimeGroup)
-	  		.gap(56)
-	  		.elasticY(true)
-	  		.mouseZoomable(true);
-	 
-	  	seriesChart.width(960)
-	  		.height(400)
-	  		.transitionDuration(500)
-	  			.mouseZoomable(true)
-	  		.margins({top: 10, right: 10, bottom:20, left: 40})
-	  		.dimension(crimeDim)
-	  		.group(crimeGroup)
-	  		.brushOn(false)
-	  		.x(d3.scaleTime().domain(d3.extent(data, function (d){
-	  			return d.dtg;
-	  		})))
-	  		.elasticY(true);
+	 		.xUnits(dc.units.ordinal)
+	 		.elasticY(true)
+	 		.xAxis().ticks(3);
+	 		
+
+
+
+	  	seriesChart.width(768)
+			    .height(480)
+			  	.yAxisLabel("Number of Crimes")
+                .xAxisLabel("Date")
+                .margins({top: 10, right: 10, bottom:50, left: 50})
+                .dimension(dayDim)
+                .group(dayCrimeGroup)
+                .transitionDuration(500)
+                .x(d3.scaleTime().domain(d3.extent(data, function(d) { return d3.timeDay(d.dtg); })))
+                .elasticY(true)
+                .seriesAccessor(function(d) { return d.key[1]; })
+                .keyAccessor(function(d) {return d.key[0];})
+                .ordinalColors(["#fc9272", "#de2d26", "#fee0d2"]);
 
 
 	 
