@@ -57,13 +57,13 @@
 	d3.csv("data/chicago_crimes_sep_2018.csv").then(function (data) {
 
 	  // format our data
-	  	var time_format = d3.utcParse("%Y-%m-%d %H:%M:%S");
+	  	var time_format = d3.utcParse("%m/%d/%Y %H:%M:%S %p");
 		let colorScale = d3.scaleOrdinal().domain(["HOMICIDE", "ROBBERY", "BURGLARY"])
 				.range(["#ca0020", "#0571b0", "#fdae61"]);	
 
 
 	  	data.forEach(function(d){
-	  		d.dtg = time_format(d.UpdateOn);
+	  		d.dtg = time_format(d.Date);
 	  		d.lat = d.Latitude;
 	  		d.long = d.Longitude;
 	  		d.prim = d.PrimaryType;
@@ -102,18 +102,28 @@
 							fillOpacity: 0.5
 							}).addTo(map);	
 
-			circle.bindPopup("Primary Type:"+ d["PrimaryType"]);
+			circle.bindPopup("Primary Type: <br>"+ d["PrimaryType"]);
 			
 		});
 
 	  	barChart.width(600)
-	  		.height(400)
-	  		.dimension(crimeDim)
-	  		.group(crimeGroup)
-	  		.x(d3.scaleOrdinal())
-	 		.xUnits(dc.units.ordinal)
-	 		.elasticY(true)
-	 		.xAxis().ticks(3);
+                .height(400)
+                .margins({top: 50, right: 50, bottom: 25, left: 40})
+                .dimension(crimeDim)
+                .x(d3.scaleOrdinal())
+                .xUnits(dc.units.ordinal)
+                .renderHorizontalGridLines(true)
+                .brushOn(false)
+                .on('renderlet', function(chart){
+                                    chart.selectAll('rect.bar').each(function(d){
+                                        d3.select(this).attr("style", "fill: " + colorScale(d.x));
+                                    });
+                                }
+                    )
+                .ordering(function(d){return d.value})    
+                .group(crimeGroup);
+			
+		
 	 		
 
 
@@ -130,7 +140,7 @@
                 .elasticY(true)
                 .seriesAccessor(function(d) { return d.key[1]; })
                 .keyAccessor(function(d) {return d.key[0];})
-                .ordinalColors(["#fc9272", "#de2d26", "#fee0d2"]);
+                .ordinalColors([ "#fdae61","#ca0020","#0571b0"]);
 
 
 	 
