@@ -26,8 +26,8 @@
 [acoes.html](d3_crossfiltrer/acoes.html)<br>
 [movies_d3_dc.html](d3_crossfiltrer/acoes.html)
 
-## Aula do dia 26/09/2018
+## Aula do dia 03/10/2018
 [earthquakes.html](d3_crossfiltrer_2/earthquakes.html)<br>
-
+[chicago.html](d3_crossfiltrer_2/chicago.html)
 
 Para saber mais sobre a sintaxe markdown, veja [este guia](https://guides.github.com/features/mastering-markdown/).
