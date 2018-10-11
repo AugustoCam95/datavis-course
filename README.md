@@ -30,4 +30,6 @@
 [earthquakes.html](d3_crossfiltrer_2/earthquakes.html)<br>
 [chicago.html](d3_crossfiltrer_2/chicago.html)
 
-Para saber mais sobre a sintaxe markdown, veja [este guia](https://guides.github.com/features/mastering-markdown/).
+## Aula do dia 10/10/2018
+[songs.html](d3_networks_trees/songs.html)<br>
+[lesmiserables.html](d3_networks_trees/lesmiserables.html)
