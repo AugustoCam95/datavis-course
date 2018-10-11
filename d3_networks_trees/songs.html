@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title> Similar Songs Network</title>
     
+<<<<<<< HEAD
     
+=======
+    <link rel="stylesheet" href="css/reset.css">
+>>>>>>> 5b946d15e4b58a5037eeb62557b95c5fe755520a
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
     <link rel="stylesheet" href="css/style.css">
@@ -34,6 +38,7 @@
         const height = 800;
 
         // Create svg element inside #vis element and attribute it to the vis variable
+<<<<<<< HEAD
         const vis = d3.select("#vis")
                       .append("svg")
                       .attr("height",height)
@@ -41,10 +46,15 @@
                       .attr("viewBox", [-width / 2, -height / 2, width, height]);
         // Read the contents of data/songs.json file and process it as a graph variable
 
+=======
+        const vis = d3.select(DOM.svg(width, height)).attr("viewBox", [-width / 2, -height / 2, width, height]);
+        // Read the contents of data/songs.json file and process it as a graph variable
+>>>>>>> 5b946d15e4b58a5037eeb62557b95c5fe755520a
         d3.json("data/songs.json").then(function(graph){
           // Set the nodes and links
           const nodes = graph.nodes;
           const links = graph.links;
+<<<<<<< HEAD
 
           const simulation = forceSimulation(nodes, links).on("tick", ticked);
         
@@ -53,6 +63,12 @@
                             .range([2, 20]);
 
 
+=======
+          
+          });
+
+           // Set the nodes and links
+>>>>>>> 5b946d15e4b58a5037eeb62557b95c5fe755520a
           const link = vis.append("g")
           .selectAll("line")
           .data(links)
@@ -60,11 +76,16 @@
           .append("line")
           .attr("class", "link");
 
+<<<<<<< HEAD
           const node = vis.append("g")
+=======
+          const nodes = vis.append("g")
+>>>>>>> 5b946d15e4b58a5037eeb62557b95c5fe755520a
           .selectAll("circle")
           .data(nodes)
           .enter()
           .append("circle")
+<<<<<<< HEAD
           .attr("r", function(nodes){
              return sqrtScale(nodes.playcount);
           })
@@ -80,10 +101,38 @@
 
               node.attr("cx", d=> d.x)
                   .attr("cy", d=> d.y);
+=======
+          .attr("r", 5)
+          .attr("class", "node")
+
+           // create simulation constant using the forceSimulation function defined down below
+          const simulation = forceSimulation(nodes, links).on("tick", ticked);
+
+           // create link svg elements
+
+
+           // create node svg elements
+
+           // define function ticked
+           function ticked() {
+              link.attr("x1", function(d){
+                      return d.source.x;
+                  })
+                  .atrr("y1", function(d){
+                      return d.source.y;
+                  })
+                  .attr("x2", function(d){
+                      return d.source.x;
+                  })
+                  .attr("y2", function(d){
+                      return d.source.y;
+                  })
+>>>>>>> 5b946d15e4b58a5037eeb62557b95c5fe755520a
            }
 
 
           // define function drag
+<<<<<<< HEAD
               function drag(simulation){
                 function dragstarted(d) {
                 if (!d3.event.active) simulation.alphaTarget(0.3).restart();
@@ -107,6 +156,9 @@
                 .on("drag", dragged)
                 .on("end", dragended);
                 }
+=======
+
+>>>>>>> 5b946d15e4b58a5037eeb62557b95c5fe755520a
           // define the forceSimulation function that will receive nodes and links and 
           // will return a d3.forceSimulation() object 
           function forceSimulation(nodes, links){
@@ -114,6 +166,7 @@
                       .force("link", d3.forceLink(links).id(d => d.id).distance(50))
                       .force("charge", d3.forceManyBody().strength(-50).distanceMax(270))
                       .force("center", d3.forceCenter());
+<<<<<<< HEAD
                     }
 
         });
@@ -134,6 +187,9 @@
            // define function ticked
           
           
+=======
+          }
+>>>>>>> 5b946d15e4b58a5037eeb62557b95c5fe755520a
     </script>
   </body>
 </html>
