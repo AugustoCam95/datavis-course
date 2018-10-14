@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title> Les Miserables Analise's</title>
+    <title>Les Miserables Analise's </title>
     
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -14,7 +14,7 @@
   <body>
     <main role="main" class="container">
       <header>
-      <h1>Les Miserables Analise's</h1>
+      <h1 style = "color:lightblue;" >Les Miserables Analise's</h1>
       </header>
       <div id="main" role="main">
         <div id="vis"></div>
@@ -28,8 +28,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script>
-        const width = 1080;
-        const height = 1080;
+        const width = 900;
+        const height = 800;
 
         // Create svg element inside #vis element and attribute it to the vis variable
         const vis = d3.select("#vis")
@@ -47,31 +47,55 @@
           const simulation = forceSimulation(nodes, links).on("tick", ticked);
         
           var sqrtScale = d3.scaleSqrt()
-                            .domain([0, 100000])
-                            .range([2, 20]);
+                            .domain([0, 100])
+                            .range([0, 15]);
 
            // Set the nodes and links
-          const link = vis.append("g")
+          let link = vis.append("g")
           .selectAll("line")
           .data(links)
           .enter()
           .append("line")
           .attr("class", "link");
 
-          const node = vis.append("g")
+          let node = vis.append("g")
           .selectAll("circle")
           .data(nodes)
           .enter()
           .append("circle")
-          .attr("r", function(nodes){
-             return sqrtScale(nodes.group);
-          })
+          .attr("fill", "cyan")
           .attr("class", "node")
+          .attr("r", function(nodes){
+             let sizeNode = 0;
+             links.forEach( l => {
+              if(nodes.id == l.source.id || nodes.id == l.target.id){
+                sizeNode += 1;
+             }
+            })
+             console.log(sizeNode);
+             return sqrtScale(sizeNode);
+          })
           .call(drag(simulation));
 
-          node.append("title").text(function(d){
-                return d["id"]+': '+ d["group"];
-          });
+          function contValeus(nodes){
+            let cont = 0;
+            links.forEach( l => {
+              if(nodes.id == l.source.id || nodes.id == l.target.id){
+                cont += 1;
+             }
+            })
+            console.log(cont);
+            return cont;
+          }
+
+
+          node.append("title").text(d =>{ 
+            let cont = contValeus(d);
+            let tooltip = d.id + ": " + cont;
+            return tooltip;
+          })
+
+          // node = node.data(nodes, function(d) { return d.id; }).style("fill", "#3182bd");
 
            function ticked() {
               link.attr("x1", d=> d.source.x)
@@ -112,7 +136,7 @@
             function forceSimulation(nodes, links){
               return d3.forceSimulation(nodes)
                         .force("link", d3.forceLink(links).id(d => d.id).distance(50))
-                        .force("charge", d3.forceManyBody().strength(-50).distanceMax(270))
+                        .force("charge", d3.forceManyBody().strength(-50).distanceMax(150))
                         .force("center", d3.forceCenter());
 
             }
