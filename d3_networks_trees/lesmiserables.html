@@ -63,8 +63,10 @@
           .data(nodes)
           .enter()
           .append("circle")
-          .attr("fill", "cyan")
           .attr("class", "node")
+          .attr("fill", function(d){
+            return colorNodes(d);
+          })
           .attr("r", function(nodes){
              let sizeNode = 0;
              links.forEach( l => {
@@ -77,7 +79,7 @@
           })
           .call(drag(simulation));
 
-          function contValeus(nodes){
+          function countValeus(nodes){
             let cont = 0;
             links.forEach( l => {
               if(nodes.id == l.source.id || nodes.id == l.target.id){
@@ -88,9 +90,26 @@
             return cont;
           }
 
+          function colorNodes(node){
+            let n_links = countValeus(node)
+            let color = null
+
+            if( n_links >= 30){
+              color = "#00868B"
+            }else if( 19 < n_links  && n_links < 30 ){
+              color = "#009ACD"
+            }else if( 9 < n_links  && n_links < 20){
+              color = "#54FF9F"
+            }else{
+              color = "#98F5FF"
+            }
+
+            return color
+          }
+
 
           node.append("title").text(d =>{ 
-            let cont = contValeus(d);
+            let cont = countValeus(d);
             let tooltip = d.id + ": " + cont;
             return tooltip;
           })
