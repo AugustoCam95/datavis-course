@@ -91,7 +91,7 @@
 	// get color depending on number of cases
 	let blues = d3.schemeBlues[5];
 	let quantize = d3.scaleQuantile()
-    .domain([0, 10, 50, 100, 200, 300, 400])
+    .domain([0, 10, 50, 100, 200])
     .range(blues);
 
 	function style(feature) {
@@ -143,9 +143,8 @@
     let populationByName = d3.map();
     let format = d3.format(".3n"); 
 
-	let promise = [d3.csv("data/tabela_fortaleza_2012.csv").then(function(d){
-						populationByName.set(d.Bairro, +d.Populacao/100000); }),
-				   d3.csv("data/tabela_fortaleza_2012.csv").then(function(d){
+	let promise = [d3.csv("data/tabela_fortaleza_2012.csv",function(d){
+						populationByName.set(d.Bairro, +d.Populacao/100);
 						homicidiosByName.set(d.Bairro,(+d.Homicidios)/populationByName.get(d.Bairro));
 					})]
 		
